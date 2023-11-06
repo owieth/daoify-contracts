@@ -52,6 +52,9 @@ contract DAO is ERC721, Ownable {
     /// @dev Explain to a developer any extra details
     uint256 private s_nextTokenId;
 
+    /// @dev Explain to a developer any extra details
+    string private s_name;
+
     /*//////////////////////////////////////////////////////////////
                                 EVENTS
     //////////////////////////////////////////////////////////////*/
@@ -90,14 +93,21 @@ contract DAO is ERC721, Ownable {
     /// @notice Explain to an end user what this does
     /// @dev Explain to a developer any extra details
     /// @param _to a parameter just like in doxygen (must be followed by parameter name)
-    function safeMint(address _to) external {
+    function safeMint(address _to, string memory _name) external {
         uint256 _tokenId = ++s_nextTokenId;
+        s_name = _name;
         _mint(_to, _tokenId);
     }
 
     /*//////////////////////////////////////////////////////////////
                                PUBLIC
     //////////////////////////////////////////////////////////////*/
+
+    /// @notice Explain to an end user what this does
+    /// @dev Explain to a developer any extra details
+    function getName() public view returns (string memory) {
+        return s_name;
+    }
 
     /// @notice Explain to an end user what this does
     /// @dev Explain to a developer any extra details
