@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import { ERC20 } from "@oz/token/ERC20/ERC20.sol";
+import { ERC721 } from "@oz/token/ERC721/ERC721.sol";
 import { Ownable } from "@oz/access/Ownable.sol";
 
-/// @title Token Test Contract
+/// @title DAOify DAO Contract
 /// @author Olivier Winkler (https://github.com/owieth)
 /// @custom:security-contact xxx@gmail.com
-contract Token is ERC20, Ownable {
+contract DAO is ERC721, Ownable {
     /*//////////////////////////////////////////////////////////////
                                  ERRORS
     //////////////////////////////////////////////////////////////*/
@@ -50,7 +50,7 @@ contract Token is ERC20, Ownable {
     //////////////////////////////////////////////////////////////*/
 
     /// @dev Explain to a developer any extra details
-    uint256 private s_number;
+    uint256 private s_nextTokenId;
 
     /*//////////////////////////////////////////////////////////////
                                 EVENTS
@@ -81,7 +81,7 @@ contract Token is ERC20, Ownable {
                                CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
 
-    constructor(address initialOwner) ERC20("Token", "TKN") Ownable(initialOwner) { }
+    constructor(address initialOwner) ERC721("DAOIFY DAO", "DAO") Ownable(initialOwner) { }
 
     /*//////////////////////////////////////////////////////////////
                                EXTERNAL
@@ -89,9 +89,10 @@ contract Token is ERC20, Ownable {
 
     /// @notice Explain to an end user what this does
     /// @dev Explain to a developer any extra details
-    /// @param newNumber a parameter just like in doxygen (must be followed by parameter name)
-    function setNumber(uint256 newNumber) external {
-        s_number = newNumber;
+    /// @param _to a parameter just like in doxygen (must be followed by parameter name)
+    function safeMint(address _to) external onlyOwner {
+        uint256 _tokenId = ++s_nextTokenId;
+        _mint(_to, _tokenId);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -101,13 +102,13 @@ contract Token is ERC20, Ownable {
     /// @notice Explain to an end user what this does
     /// @dev Explain to a developer any extra details
     function incrementNumber() public {
-        s_number++;
+        s_nextTokenId++;
     }
 
     /// @notice Explain to an end user what this does
     /// @dev Explain to a developer any extra details
     function getCurrentNumber() public view returns (uint256) {
-        return s_number;
+        return s_nextTokenId;
     }
 
     /*//////////////////////////////////////////////////////////////

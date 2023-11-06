@@ -3,7 +3,7 @@ pragma solidity ^0.8.18;
 
 import { Script } from "@std/Script.sol";
 
-import { Token } from "../src/Token.sol";
+import { DAO } from "../src/DAO.sol";
 
 /// @title Deployscript for {Token}
 /// @author Olivier Winkler (https://github.com/owieth)
@@ -15,7 +15,7 @@ contract Deploy is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        new Token(msg.sender);
+        new DAO(msg.sender);
 
         vm.stopBroadcast();
     }
