@@ -90,7 +90,7 @@ contract DAO is ERC721, Ownable {
     /// @notice Explain to an end user what this does
     /// @dev Explain to a developer any extra details
     /// @param _to a parameter just like in doxygen (must be followed by parameter name)
-    function safeMint(address _to) external onlyOwner {
+    function safeMint(address _to) external {
         uint256 _tokenId = ++s_nextTokenId;
         _mint(_to, _tokenId);
     }
