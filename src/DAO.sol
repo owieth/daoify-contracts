@@ -97,6 +97,37 @@ contract DAO is ERC721, Ownable {
         emit ActivityEvent(_dao, _account, _action);
     }
 
+    /// @notice Explain to an end user what this does
+    /// @dev Explain to a developer any extra details
+    /// @param _tokenId a parameter just like in doxygen (must be followed by parameter name)
+    /// @param _member a parameter just like in doxygen (must be followed by parameter name)
+    function addMember(uint256 _tokenId, address _member) external onlyDAOOwner(_tokenId) {
+        s_daos[_tokenId].members.push(_member);
+    }
+
+    /// @notice Explain to an end user what this does
+    /// @dev Explain to a developer any extra details
+    /// @param _tokenId a parameter just like in doxygen (must be followed by parameter name)
+    /// @param _member a parameter just like in doxygen (must be followed by parameter name)
+    function removeMember(uint256 _tokenId, address _member) external onlyDAOOwner(_tokenId) {
+        address[] storage _members = s_daos[_tokenId].members;
+        uint256 _arrayLength = _members.length;
+
+        for (uint256 i; i < _arrayLength;) {
+            if (_members[i] == _member) {
+                _members[i] = _members[_arrayLength - 1];
+            }
+
+            unchecked {
+                ++i;
+            }
+        }
+
+        _members.pop();
+
+        s_daos[_tokenId].members = _members;
+    }
+
     /*//////////////////////////////////////////////////////////////
                                PUBLIC
     //////////////////////////////////////////////////////////////*/
