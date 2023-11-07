@@ -49,9 +49,10 @@ contract DAO is ERC721, Ownable {
     //////////////////////////////////////////////////////////////*/
 
     /// @dev Explain to a developer any extra details
+    /// @param dao a parameter just like in doxygen (must be followed by parameter name)
     /// @param account a parameter just like in doxygen (must be followed by parameter name)
     /// @param action a parameter just like in doxygen (must be followed by parameter name)
-    event ActivityEvent(address indexed account, string indexed action);
+    event ActivityEvent(uint256 indexed dao, address indexed account, string indexed action);
 
     /*//////////////////////////////////////////////////////////////
                                CONSTRUCTOR
@@ -75,6 +76,15 @@ contract DAO is ERC721, Ownable {
         _mint(_to, _tokenId);
 
         s_daos[_tokenId] = _daoStruct;
+    }
+
+    /// @notice Explain to an end user what this does
+    /// @dev Explain to a developer any extra details
+    /// @param _dao a parameter just like in doxygen (must be followed by parameter name)
+    /// @param _account a parameter just like in doxygen (must be followed by parameter name)
+    /// @param _action a parameter just like in doxygen (must be followed by parameter name)
+    function addActivity(uint256 _dao, address _account, string memory _action) external {
+        emit ActivityEvent(_dao, _account, _action);
     }
 
     /*//////////////////////////////////////////////////////////////
