@@ -26,24 +26,13 @@ contract DAO is ERC721, Ownable {
     /// @dev Explain to a developer any extra details
     /// @param id a parameter just like in doxygen (must be followed by parameter name)
     /// @param name a parameter just like in doxygen (must be followed by parameter name)
-    struct TokenStruct {
-        uint256 id;
+    struct DAOStruct {
+        uint256 tokenId;
+        address owner;
         string name;
+        address[] members;
+        string imageUri;
     }
-
-    /*//////////////////////////////////////////////////////////////
-                                CONSTANTS
-    //////////////////////////////////////////////////////////////*/
-
-    /// @dev Explain to a developer any extra details
-    uint256 private constant CONSTANT_NUMBER = 100;
-
-    /*//////////////////////////////////////////////////////////////
-                                IMMUTABLES
-    //////////////////////////////////////////////////////////////*/
-
-    /// @dev Explain to a developer any extra details
-    uint256 private immutable i_immutableNumber = 100;
 
     /*//////////////////////////////////////////////////////////////
                                  STORAGE
@@ -53,32 +42,16 @@ contract DAO is ERC721, Ownable {
     uint256 private s_nextTokenId;
 
     /// @dev Explain to a developer any extra details
-    string private s_name;
+    mapping(uint256 tokenId => DAOStruct dao) private s_daos;
 
     /*//////////////////////////////////////////////////////////////
                                 EVENTS
     //////////////////////////////////////////////////////////////*/
 
     /// @dev Explain to a developer any extra details
-    /// @param from a parameter just like in doxygen (must be followed by parameter name)
-    /// @param to a parameter just like in doxygen (must be followed by parameter name)
-    /// @param id a parameter just like in doxygen (must be followed by parameter name)
-    event TokenEvent(address indexed from, address indexed to, address indexed id);
-
-    /*//////////////////////////////////////////////////////////////
-                                MODIFIERS
-    //////////////////////////////////////////////////////////////*/
-
-    /// @dev Explain to a developer any extra details
-    modifier onlyMinter() {
-        _;
-    }
-
-    /// @dev Explain to a developer any extra details
-    /// @param minter a parameter just like in doxygen (must be followed by parameter name)
-    modifier onlyMinterByAddress(address minter) {
-        _;
-    }
+    /// @param account a parameter just like in doxygen (must be followed by parameter name)
+    /// @param action a parameter just like in doxygen (must be followed by parameter name)
+    event ActivityEvent(address indexed account, string indexed action);
 
     /*//////////////////////////////////////////////////////////////
                                CONSTRUCTOR
@@ -93,10 +66,15 @@ contract DAO is ERC721, Ownable {
     /// @notice Explain to an end user what this does
     /// @dev Explain to a developer any extra details
     /// @param _to a parameter just like in doxygen (must be followed by parameter name)
-    function safeMint(address _to, string memory _name) external {
+    function createDAO(address _to, string memory _name, address[] memory _members, string memory _imageUri) external {
         uint256 _tokenId = ++s_nextTokenId;
-        s_name = _name;
+
+        DAOStruct memory _daoStruct =
+            DAOStruct({ tokenId: _tokenId, owner: _to, name: _name, members: _members, imageUri: _imageUri });
+
         _mint(_to, _tokenId);
+
+        s_daos[_tokenId] = _daoStruct;
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -105,35 +83,23 @@ contract DAO is ERC721, Ownable {
 
     /// @notice Explain to an end user what this does
     /// @dev Explain to a developer any extra details
-    function getName() public view returns (string memory) {
-        return s_name;
+    function getDAOs() public view returns (DAOStruct[] memory) {
+        DAOStruct[] memory _daosQuery = new DAOStruct[](s_nextTokenId);
+
+        for (uint256 i; i < s_nextTokenId;) {
+            _daosQuery[i] = s_daos[i];
+
+            unchecked {
+                ++i;
+            }
+        }
+
+        return _daosQuery;
     }
 
     /// @notice Explain to an end user what this does
     /// @dev Explain to a developer any extra details
-    function incrementNumber() public {
-        s_nextTokenId++;
+    function getDAO(uint256 _tokenId) public view returns (DAOStruct memory) {
+        return s_daos[_tokenId];
     }
-
-    /// @notice Explain to an end user what this does
-    /// @dev Explain to a developer any extra details
-    function getCurrentNumber() public view returns (uint256) {
-        return s_nextTokenId;
-    }
-
-    /*//////////////////////////////////////////////////////////////
-                               INTERNAL
-    //////////////////////////////////////////////////////////////*/
-
-    /// @notice Explain to an end user what this does
-    /// @dev Explain to a developer any extra details
-    function _calculateNumber() internal { }
-
-    /*//////////////////////////////////////////////////////////////
-                               PRIVATE
-    //////////////////////////////////////////////////////////////*/
-
-    /// @notice Explain to an end user what this does
-    /// @dev Explain to a developer any extra details
-    function _calculateAmount() private { }
 }
