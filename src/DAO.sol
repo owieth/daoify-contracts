@@ -55,6 +55,16 @@ contract DAO is ERC721, Ownable {
     event ActivityEvent(uint256 indexed dao, address indexed account, string indexed action);
 
     /*//////////////////////////////////////////////////////////////
+                                MODIFIERS
+    //////////////////////////////////////////////////////////////*/
+
+    /// @dev Explain to a developer any extra details
+    modifier onlyDAOOwner(uint256 _tokenId) {
+        require(s_daos[_tokenId].owner == msg.sender, "NOT OWNER");
+        _;
+    }
+
+    /*//////////////////////////////////////////////////////////////
                                CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
 
